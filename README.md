@@ -24,6 +24,12 @@ Duration:Dec 2024 to Jan 2025
 # PREDICTIVE-ANALYSIS-USING-MACHINE-LEARNING--2
 
 
+
+PROJECT TITLE:"House Price Prediction Using Random Forest Regressor: A Machine Learning Approach"
+
+
+
+
 Project Objectives
 
 
