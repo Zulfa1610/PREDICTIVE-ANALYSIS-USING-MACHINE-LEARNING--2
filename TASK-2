@@ -1,0 +1,40 @@
+!pip install pandas numpy scikit-learn matplotlib seaborn
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+url = "https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv"
+df = pd.read_csv(url)
+print("Dataset Preview:")
+print(df.head())
+print("\nDataset Information:")
+df.info()
+print("\nSummary Statistics:")
+print(df.describe())
+print("\nMissing Values:")
+print(df.isnull().sum())
+plt.figure(figsize=(10, 8))
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.title('Correlation Heatmap')
+plt.show()
+X = df.drop('medv', axis=1)  # 'medv' is the median house price
+y = df['medv']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestRegressor(random_state=42, n_estimators=100)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("Mean Absolute Error (MAE):", mean_absolute_error(y_test, y_pred))
+print("Mean Squared Error (MSE):", mean_squared_error(y_test, y_pred))
+print("Root Mean Squared Error (RMSE):", np.sqrt(mean_squared_error(y_test, y_pred)))
+print("R-squared (R2):", r2_score(y_test, y_pred))
+feature_importances = pd.Series(model.feature_importances_, index=X.columns)
+feature_importances.sort_values().plot(kind='barh', color='blue')
+plt.title('Feature Importance')
+plt.show()
+new_house = [[0.1, 18.0, 2.31, 0, 0.538, 6.575, 65.2, 4.0900, 1, 296, 15.3, 396.90, 4.98]]  # Example values
+new_house_df = pd.DataFrame(new_house, columns=X.columns)
+predicted_price = model.predict(new_house_df)
+print(f"Predicted House Price: ${predicted_price[0]:.2f}")
